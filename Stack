@@ -1,0 +1,126 @@
+package testmystack;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class MyStack<E>{
+    private ArrayList<E> list = new ArrayList<>();
+    
+    public void push (E o){
+        list.add(o);
+    }
+    
+    public E pop(){
+        if(!isEmpty()){
+            return list.remove(list.size()-1);
+        }
+        return null;
+    }
+    
+    public E peek(){
+        if(!isEmpty()){
+            return list.get(list.size()-1);
+        }
+        return null;
+    }
+    
+    public int getSize(){
+        return list.size();
+    }
+    
+    public boolean isEmpty(){
+        return list.isEmpty();
+    }
+    
+    public boolean search(E o){
+        return list.contains(o);
+    }
+    
+    public String toString(){
+        return "Stack: "+ list.toString();
+    }
+}
+
+public class TestMyStack {
+
+    public static int sumStack(MyStack<Integer> stack){
+        int sum=0;
+        MyStack<Integer> temp = new MyStack<>();
+        while(!stack.isEmpty()){
+            int value=stack.pop();
+            sum+=value;
+            temp.push(value);
+        }
+        while(!temp.isEmpty()){
+            stack.push(temp.pop());
+        }
+        return sum;
+    }
+    
+    public static void main(String[] args) {
+        //Q1
+        MyStack<Character> charStack= new MyStack<>();
+        charStack.push('a');
+        charStack.push('b');
+        charStack.push('c');
+        charStack.peek();
+        charStack.getSize();
+        System.out.println(charStack);
+        System.out.println("Contains 'b' ? "+ charStack.search('b'));
+        System.out.println("Contains 'k' ? "+ charStack.search('k'));
+        charStack.pop();
+        System.out.println(charStack);
+        System.out.println("");
+        
+        MyStack<Integer> intStack=new MyStack<>();
+        intStack.push(1);
+        intStack.push(2);
+        intStack.push(3);
+        System.out.println(intStack);
+        System.out.println("Contains '6' ? "+ intStack.search(6));
+        System.out.println("");
+        
+        //Q3
+        System.out.println("Sum of Stack: "+ sumStack(intStack));
+        System.out.println("");
+        
+        //Q2
+        Scanner sc = new Scanner (System.in);
+        MyStack<Integer> stack= new MyStack<>();
+        System.out.print("Enter an integer: ");
+        int n=sc.nextInt();
+        
+        for(int i=1; i<=n; i++){
+            stack.push(i);
+        }
+        System.out.println("Stack size: "+ stack.getSize());
+        System.out.print("Stack elements (popped):");
+        while(!stack.isEmpty()){
+            System.out.println(stack.pop()+" ");
+        }
+        System.out.println();
+        
+        //Q4
+        Scanner scn= new Scanner(System.in);
+        System.out.println("Enter a string (max 15 char):  ");
+        String str = scn.nextLine();
+        str=str.replaceAll("\\s+", "").toLowerCase();
+        
+        MyStack<Character> pStack= new MyStack<>();
+        for(char c : str.toCharArray()){
+            stack.push(c);
+        }
+        
+        String reversed="";
+        while(!pStack.isEmpty()){
+            reversed+=stack.pop();
+        }
+        
+        if(str.equals(reversed)){
+            System.out.println("The String is a palindrome");
+        }else{
+            System.out.println("The String is not palindrome");
+        }
+    }
+    
+}
