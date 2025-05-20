@@ -1,0 +1,45 @@
+package testgraph;
+
+import java.util.*;
+
+class Graph{
+    private int vertices;
+    private LinkedList<Integer>[] adjList;
+    
+    public Graph(int v){
+        vertices=v;
+        adjList = new LinkedList[v];
+        for(int i=0; i<v; i++){
+            adjList[i]=new LinkedList<>();
+        }
+    }
+    public void addEdge(int src, int dest){
+        adjList[src].add(dest);
+    }
+    public boolean addUndirectedEdge(int u, int v){
+        adjList[u].add(v);
+        adjList[v].add(u);
+        return true;
+    }
+    public void printGraph(){
+        for(int i=0; i<vertices; i++){
+            System.out.print(i+ ": ");
+            for(int j : adjList[i]){
+                System.out.print(j+ " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+public class TestGraph {
+
+    public static void main(String[] args) {
+        Graph g = new Graph(5);
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addUndirectedEdge(3, 4);
+        g.printGraph();
+    }
+    
+}
