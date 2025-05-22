@@ -1,0 +1,245 @@
+package testbst;
+
+import java.util.ArrayList;
+
+class TreeNode<E extends Comparable<E>> {
+    E element;
+    TreeNode<E> left;
+    TreeNode<E> right;
+
+    public TreeNode(E e) {
+        element = e;
+    }
+}
+
+class BST<E extends Comparable<E>> {
+    protected TreeNode<E> root;
+    protected int size = 0;
+
+    public BST() {
+    }
+
+    public boolean search(E e) {
+        TreeNode<E> current = root;
+        while (current != null) {
+            if (e.compareTo(current.element) < 0) {
+                current = current.left;
+            } else if (e.compareTo(current.element) > 0) {
+                current = current.right;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean insert(E e) {
+        if (root == null) {
+            root = new TreeNode<>(e);
+        } else {
+            TreeNode<E> parent = null;
+            TreeNode<E> current = root;
+            while (current != null) {
+                if (e.compareTo(current.element) < 0) {
+                    parent = current;
+                    current = current.left;
+                } else if (e.compareTo(current.element) > 0) {
+                    parent = current;
+                    current = current.right;
+                } else {
+                    return false; // Duplicate node not inserted
+                }
+            }
+            if (e.compareTo(parent.element) < 0) {
+                parent.left = new TreeNode<>(e);
+            } else {
+                parent.right = new TreeNode<>(e);
+            }
+        }
+        size++;
+        return true;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int height() {
+        return height(root);
+    }
+
+    private int height(TreeNode<E> node) {
+        if (node == null) return -1;
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
+
+    public E getRoot() {
+        return root != null ? root.element : null;
+    }
+
+    public E minValue() {
+        if (root == null) return null;
+        TreeNode<E> current = root;
+        while (current.left != null) {
+            current = current.left;
+        }
+        return current.element;
+    }
+
+    public E maxValue() {
+        if (root == null) return null;
+        TreeNode<E> current = root;
+        while (current.right != null) {
+            current = current.right;
+        }
+        return current.element;
+    }
+
+    public ArrayList<TreeNode<E>> path(E e) {
+        ArrayList<TreeNode<E>> list = new ArrayList<>();
+        TreeNode<E> current = root;
+        while (current != null) {
+            list.add(current);
+            if (e.compareTo(current.element) < 0) {
+                current = current.left;
+            } else if (e.compareTo(current.element) > 0) {
+                current = current.right;
+            } else {
+                break;
+            }
+        }
+        return list;
+    }
+
+    public boolean delete(E e) {
+        TreeNode<E> parent = null;
+        TreeNode<E> current = root;
+        
+        // Locate the node to be deleted and its parent node
+        while (current != null) {
+            if (e.compareTo(current.element) < 0) {
+                parent = current;
+                current = current.left;
+            } else if (e.compareTo(current.element) > 0) {
+                parent = current;
+                current = current.right;
+            } else {
+                break; // Element is in the tree pointed at by current
+            }
+        }
+        
+        if (current == null) {
+            return false; // Element is not in the tree
+        }
+        
+        // Case 1: current has no left child
+        if (current.left == null) {
+            // Connect the parent with the right child of the current node
+            if (parent == null) {
+                root = current.right;
+            } else {
+                if (e.compareTo(parent.element) < 0) {
+                    parent.left = current.right;
+                } else {
+                    parent.right = current.right;
+                }
+            }
+        } else {
+            // Case 2: The current node has a left child
+            // Locate the rightmost node in the left subtree of the current node
+            // and also its parent
+            TreeNode<E> parentOfRightMost = current;
+            TreeNode<E> rightMost = current.left;
+            
+            while (rightMost.right != null) {
+                parentOfRightMost = rightMost;
+                rightMost = rightMost.right;
+            }
+            
+            // Replace the element in current by the element in rightMost
+            current.element = rightMost.element;
+            
+            // Eliminate rightmost node
+            if (parentOfRightMost.right == rightMost) {
+                parentOfRightMost.right = rightMost.left;
+            } else {
+                // Special case: parentOfRightMost == current
+                parentOfRightMost.left = rightMost.left;
+            }
+        }
+        
+        size--;
+        return true;
+    }
+
+    public boolean clear() {
+        root = null;
+        size = 0;
+        return true;
+    }
+
+    protected void inorder(TreeNode<E> root) {
+        if (root == null) return;
+        inorder(root.left);
+        System.out.print(root.element + " ");
+        inorder(root.right);
+    }
+
+    protected void postorder(TreeNode<E> root) {
+        if (root == null) return;
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.element + " ");
+    }
+
+    protected void preorder(TreeNode<E> root) {
+        if (root == null) return;
+        System.out.print(root.element + " ");
+        preorder(root.left);
+        preorder(root.right);
+    }
+}
+
+public class TestBST {
+    public static void main(String[] args) {
+        BST<Integer> tree = new BST<>();
+        Integer[] numbers = {45, 88, 54, 76, 98, 1, 2, 20, 6, 53, 42, 100, 86, 32, 28, 65, 14};
+        
+        for (int num : numbers) {
+            tree.insert(num);
+        }
+        
+        System.out.print("Inorder (sorted): ");
+        tree.inorder(tree.root);
+        System.out.println();
+        
+        System.out.print("Postorder: ");
+        tree.postorder(tree.root);
+        System.out.println();
+        
+        System.out.print("Preorder: ");
+        tree.preorder(tree.root);
+        System.out.println();
+        
+        System.out.println("Height of BST: " + tree.height());
+        System.out.println("Root for BST is: " + tree.getRoot());
+        System.out.println("Check whether 10 is in the tree? " + tree.search(10));
+        
+        System.out.println("Delete 53");
+        tree.delete(53);
+        
+        System.out.print("Updated Inorder data (sorted): ");
+        tree.inorder(tree.root);
+        System.out.println();
+        
+        System.out.println("Min Value: " + tree.minValue());
+        System.out.println("Max Value: " + tree.maxValue());
+        
+        System.out.print("A path from the root to 6 is: ");
+        ArrayList<TreeNode<Integer>> path = tree.path(6);
+        for (TreeNode<Integer> node : path) {
+            System.out.print(node.element + " ");
+        }
+        System.out.println();
+    }
+}
