@@ -1,0 +1,85 @@
+package searchsortlab;
+
+public class SearchSortLab {
+    
+    // Q1: Selection sort using smallest value
+    public static void selectionSortSmallest(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            // Swap the found minimum element with the first element
+            int temp = arr[minIndex];
+            arr[minIndex] = arr[i];
+            arr[i] = temp;
+        }
+    }
+
+    // Q2: Selection sort using largest value
+    public static void selectionSortLargest(int[] arr) {
+        for (int i = arr.length - 1; i > 0; i--) {
+            int maxIndex = i;
+            for (int j = i - 1; j >= 0; j--) {
+                if (arr[j] > arr[maxIndex]) {
+                    maxIndex = j;
+                }
+            }
+            // Swap the found maximum element with the current element
+            int temp = arr[maxIndex];
+            arr[maxIndex] = arr[i];
+            arr[i] = temp;
+        }
+    }
+
+    // Q3: Display array values
+    public static void displayArray(int[] arr) {
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+
+    // Q4: Insertion sort
+    public static void insertionSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            
+            // Move elements of arr[0..i-1] that are greater than key
+            // to one position ahead of their current position
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j = j - 1;
+            }
+            arr[j + 1] = key;
+        }
+    }
+
+    public static void main(String[] args) {
+        // Test selection sorts
+        int[] arr1 = {45, 7, 2, 8, 19, 3};
+        System.out.println("Original array for selection sort (smallest):");
+        displayArray(arr1);
+        selectionSortSmallest(arr1);
+        System.out.println("After selection sort (smallest):");
+        displayArray(arr1);
+        
+        int[] arr2 = {45, 7, 2, 8, 19, 3};
+        System.out.println("\nOriginal array for selection sort (largest):");
+        displayArray(arr2);
+        selectionSortLargest(arr2);
+        System.out.println("After selection sort (largest):");
+        displayArray(arr2);
+        
+        // Test insertion sort
+        int[] arr3 = {10, 34, 2, 56, 7, 67, 88, 42};
+        System.out.println("\nOriginal array for insertion sort:");
+        displayArray(arr3);
+        insertionSort(arr3);
+        System.out.println("After insertion sort:");
+        displayArray(arr3);
+    }
+}
