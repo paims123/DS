@@ -1,0 +1,51 @@
+package findmaxcircle;
+
+// Circle.java
+class Circle implements Comparable<Circle> {
+    private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    @Override
+    public int compareTo(Circle other) {
+        return Double.compare(this.radius, other.radius);
+    }
+
+    @Override
+    public String toString() {
+        return "Circle with radius " + radius;
+    }
+}
+
+
+public class FindMaxCircle {
+    
+     public static <E extends Comparable<E>> E max(E[] list) {
+        E max = list[0];
+        for (E elem : list) {
+            if (elem.compareTo(max) > 0)
+                max = elem;
+        }
+        return max;
+    }
+    
+    public static void main(String[] args) {
+        Integer[] nums = {1, 2, 3};
+        String[] colors = {"red", "green", "blue"};
+        Circle[] circles = {
+            new Circle(3.0),
+            new Circle(2.9),
+            new Circle(5.9)
+        };
+
+        System.out.println("Max Integer: " + max(nums));
+        System.out.println("Max String: " + max(colors));
+        System.out.println("Max Circle: " + max(circles));
+    }
+}
