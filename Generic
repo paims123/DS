@@ -1,0 +1,64 @@
+package testmygeneric;
+
+class MyGeneric<E>{
+    private E e;
+    
+    public MyGeneric(){
+    }
+    
+    public MyGeneric(E e){
+        this.e=e;
+    }
+    
+    public void setE(E e){
+        this.e=e;
+    }
+    
+    public E getE(){
+        return e;
+    }
+}
+
+public class TestMyGeneric {
+
+     public static <T extends Comparable<T>> T maximum(T a, T b, T c) {
+        T max = a;
+        if (b.compareTo(max) > 0)
+            max = b;
+        if (c.compareTo(max) > 0)
+            max = c;
+        return max;
+    }
+     
+     public static <T extends Comparable<T>> String minmax(T[] array) {
+        T min = array[0];
+        T max = array[0];
+        for (T elem : array) {
+            if (elem.compareTo(min) < 0) min = elem;
+            if (elem.compareTo(max) > 0) max = elem;
+        }
+        return "Min = " + min + " Max = " + max;
+    }
+     
+    public static void main(String[] args) {
+        //Q1
+        MyGeneric<String> strObj = new MyGeneric<>();
+        strObj.setE("Hello Generics");
+        System.out.println("String value: "+strObj.getE());
+        
+        MyGeneric<Integer> intObj = new MyGeneric<>(123);
+        System.out.println("Integer value: "+ intObj.getE());
+        
+        //Q2
+        System.out.println("Max of 3, 4, 2: " + maximum(3, 4, 2));
+        System.out.println("Max of apple, banana, cherry: " + maximum("apple", "banana", "cherry"));
+        
+        //Q4
+        Integer[] intArray = {5, 3, 7, 1, 4, 9, 8, 2};
+        String[] strArray = {"red", "blue", "orange", "tan"};
+
+        System.out.println(minmax(intArray));
+        System.out.println(minmax(strArray));
+    }
+    
+}
